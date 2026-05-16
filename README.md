@@ -106,9 +106,6 @@ Through this project, I improved my skills in:
 
 **Dhriti Gupta**
 
-* GitHub: https://github.com/dhritigupta-1
-* LinkedIn: Add your LinkedIn profile link here
-
 ---
 
 # 📄 License
