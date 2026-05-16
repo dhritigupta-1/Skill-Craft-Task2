@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChronoX — Premium Stopwatch</title>
+  <meta name="description" content="A sleek, interactive stopwatch with lap tracking, precision timing, and a stunning dark UI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background particles -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <main class="app" role="main">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <span class="logo-text">ChronoX</span>
+      </div>
+      <div class="header-badge">Precision Timer</div>
+    </header>
+
+    <!-- Main Timer Card -->
+    <section class="timer-card" aria-label="Stopwatch display">
+
+      <!-- SVG Ring Progress -->
+      <div class="ring-container" aria-hidden="true">
+        <svg class="ring-svg" viewBox="0 0 320 320">
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#a78bfa"/>
+              <stop offset="50%" style="stop-color:#60a5fa"/>
+              <stop offset="100%" style="stop-color:#34d399"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- Track -->
+          <circle class="ring-track" cx="160" cy="160" r="148" />
+          <!-- Progress -->
+          <circle class="ring-progress" id="ringProgress" cx="160" cy="160" r="148"
+            stroke="url(#ringGradient)" filter="url(#glow)" />
+        </svg>
+
+        <!-- Time Display -->
+        <div class="time-display">
+          <div class="time-main" id="timeDisplay" aria-live="polite" aria-atomic="true">
+            <span id="timeHours">00</span><span class="colon">:</span><span id="timeMinutes">00</span><span class="colon">:</span><span id="timeSeconds">00</span>
+          </div>
+          <div class="time-ms" id="timeMsDisplay">
+            <span id="timeMs">.000</span>
+          </div>
+          <div class="status-pill" id="statusPill">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-label">Laps</span>
+          <span class="stat-value" id="lapCount">0</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Best Lap</span>
+          <span class="stat-value" id="bestLap">—</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Avg Lap</span>
+          <span class="stat-value" id="avgLap">—</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls" role="group" aria-label="Stopwatch controls">
+        <button class="btn btn-secondary" id="btnLapReset" aria-label="Lap or Reset" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 .49-3.7"/>
+          </svg>
+          <span id="lapResetLabel">Lap</span>
+        </button>
+
+        <button class="btn btn-primary" id="btnStartPause" aria-label="Start stopwatch">
+          <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none">
+            <rect x="6" y="4" width="4" height="16"/>
+            <rect x="14" y="4" width="4" height="16"/>
+          </svg>
+        </button>
+
+        <button class="btn btn-secondary" id="btnShare" aria-label="Share results">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span>Share</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Keyboard Shortcut Hint -->
+    <p class="shortcut-hint" aria-label="Keyboard shortcut: press Space bar">
+      Press <kbd>Space</kbd> to start · <kbd>L</kbd> for lap · <kbd>R</kbd> to reset
+    </p>
+
+    <!-- Lap Times Panel -->
+    <section class="laps-panel" id="lapsPanel" aria-label="Lap times">
+      <div class="laps-header">
+        <h2 class="laps-title">Lap Times</h2>
+        <button class="btn-clear" id="btnClearLaps" aria-label="Clear all laps" style="display:none">
+          Clear all
+        </button>
+      </div>
+      <div class="laps-empty" id="lapsEmpty" aria-live="polite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+        </svg>
+        <p>No laps recorded yet</p>
+        <span>Hit <strong>Lap</strong> while the timer is running</span>
+      </div>
+      <ol class="laps-list" id="lapsList" reversed aria-label="List of lap times"></ol>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
