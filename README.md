@@ -89,22 +89,6 @@ This project was created as part of my internship task to build an interactive s
 
 ---
 
-# 📸 Preview
-
-Add screenshots or GIFs of your project here.
-
----
-
-# 🔗 Live Demo
-
-You can deploy this project using:
-
-* GitHub Pages
-* Netlify
-* Vercel
-
----
-
 # 📚 Learning Outcomes
 
 Through this project, I improved my skills in:
